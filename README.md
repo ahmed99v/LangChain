@@ -333,4 +333,3 @@ These features can transform the assistant into a full AI tutoring system.
 
 The Student AI Assistant combines modern AI technologies with educational materials to provide interactive learning support. By integrating a local language model, a retrieval system, and a React interface, the system can explain concepts, show formulas, and guide students through problem-solving processes.
 
-This architecture provides a strong foundation for building scalable and intelligent educational tools.
