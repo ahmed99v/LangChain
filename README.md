@@ -1,186 +1,336 @@
-# LangChain TypeScript Project with Local Llama3
+# Student AI Assistant
+
+### LangChain + TypeScript + React
 
 ## Overview
 
-This project demonstrates how to build an AI application using **LangChain with TypeScript** and a locally running **Llama3** model. The system connects a Large Language Model (LLM) to a TypeScript backend, enabling prompt-based AI responses without relying on external APIs.
+This project is a **Student AI Assistant** designed to help students study theoretical concepts and understand mathematical or scientific formulas. The system uses a Large Language Model combined with a knowledge retrieval system to provide structured explanations, formulas, and step-by-step problem-solving assistance.
 
-The project shows how to:
+The assistant allows students to ask questions such as:
 
-* Connect LangChain to a locally hosted LLM
-* Send prompts from a TypeScript application
-* Receive and process AI-generated responses
-* Structure a clean and maintainable AI backend
+* Explain theoretical concepts
+* Understand formulas
+* Solve problems step by step
+* Retrieve explanations from study materials
 
-The model runs locally, which improves privacy, reduces API costs, and allows full control of the AI environment.
+The system is built with:
 
----
-
-## Architecture
-
-The system architecture is simple and modular.
-
-```
-User Input
-   ↓
-Prompt Handler
-   ↓
-LangChain
-   ↓
-Llama3 Model (Local)
-   ↓
-Generated Response
-```
-
-LangChain acts as the orchestration layer between the application and the language model.
+* **TypeScript** for backend development
+* **React** for the frontend interface
+* **LangChain** for AI orchestration
+* **Local LLM (Llama3)** for language processing
+* **Vector database** for knowledge retrieval
 
 ---
 
-## Project Structure
+# System Architecture
+
+The assistant follows a Retrieval-Augmented Generation (RAG) architecture.
 
 ```
-project-root
+Student (React UI)
+        ↓
+Frontend API Client
+        ↓
+Backend (Node.js + TypeScript)
+        ↓
+LangChain Processing
+        ↓
+Retriever (Vector Database)
+        ↓
+Knowledge Base
+        ↓
+Local LLM (Llama3)
+        ↓
+AI Response
+```
+
+This architecture allows the system to combine AI reasoning with real educational materials.
+
+---
+
+# Project Structure
+
+```
+student-ai-assistant
 │
-├── src
-│   ├── index.ts
-│   ├── llm
-│   │   └── model.ts
-│   └── prompts
-│       └── prompt.ts
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── services
+│   │   └── App.tsx
 │
-├── package.json
-├── tsconfig.json
-└── README.md
+├── backend
+│   ├── src
+│   │   ├── ai
+│   │   ├── chains
+│   │   ├── services
+│   │   ├── routes
+│   │   └── server.ts
+│
+└── knowledge-base
+    ├── physics
+    ├── mathematics
+    └── chemistry
 ```
-
-### Directory Description
-
-**src/index.ts**
-
-Entry point of the application. It loads the AI model and executes a prompt.
-
-**src/llm/model.ts**
-
-Responsible for configuring and initializing the Llama3 model connection through LangChain.
-
-**src/prompts/prompt.ts**
-
-Contains reusable prompt templates used to structure AI requests.
 
 ---
 
-## Prerequisites
+# Development Steps
 
-Before running the project, ensure the following are installed:
+Below are the main development stages required to build the Student Assistant.
 
-* Node.js (version 18 or higher)
-* npm
-* A local Llama3 model running
+---
+
+## Step 1 — Setup Backend Environment
+
+Initialize the backend project and install required dependencies.
+
+Typical setup includes:
+
+* Node.js
 * TypeScript
+* Express or Fastify
+* LangChain
 
-You also need LangChain and its dependencies installed in the project.
+The backend will handle AI logic, document retrieval, and API endpoints.
 
 ---
 
-## Installation
+## Step 2 — Connect the Local LLM
 
-Clone the repository and install dependencies.
+Configure the system to connect to the locally running Llama3 model.
 
-```bash
-npm install
+This module is responsible for:
+
+* initializing the language model
+* handling prompts
+* returning generated responses
+
+The AI model acts as the reasoning engine of the assistant.
+
+---
+
+## Step 3 — Create a Document Loader
+
+Educational content must be loaded into the system.
+
+Examples of study materials:
+
+* theory notes
+* textbook sections
+* formula explanations
+
+The document loader reads these files and prepares them for processing.
+
+---
+
+## Step 4 — Split Documents into Chunks
+
+Large documents must be divided into smaller pieces so the AI system can process them efficiently.
+
+This step improves:
+
+* search accuracy
+* retrieval performance
+* response relevance
+
+Each chunk contains a small portion of educational content.
+
+---
+
+## Step 5 — Generate Embeddings
+
+Each document chunk is converted into a vector representation called an embedding.
+
+Embeddings capture the **semantic meaning** of the text so that the system can find related content even if the exact words are different.
+
+---
+
+## Step 6 — Store Embeddings in a Vector Database
+
+The generated embeddings are stored inside a vector database.
+
+This database allows the system to perform **semantic search**.
+
+When a student asks a question, the system retrieves the most relevant study material.
+
+---
+
+## Step 7 — Build the Retrieval System (RAG)
+
+The assistant uses a retrieval system to find useful study content before generating an answer.
+
+The process works as follows:
+
+```
+Student Question
+      ↓
+Embedding
+      ↓
+Vector Search
+      ↓
+Relevant Study Materials
 ```
 
-This installs all required libraries for the TypeScript AI environment.
+These retrieved materials become context for the AI model.
 
 ---
 
-## Running the Application
+## Step 8 — Create the Study Prompt Template
 
-Start the application using:
+A prompt template instructs the AI how to respond.
 
-```bash
-npm start
-```
+The prompt should guide the model to:
 
-This command executes the TypeScript entry file using `ts-node`.
+* explain the theory clearly
+* show formulas when necessary
+* provide examples
+* break down solutions step by step
 
-The system will send a prompt to the locally running Llama3 model and print the generated response in the console.
-
----
-
-## Example Execution Flow
-
-1. The application starts from `index.ts`.
-2. LangChain initializes the LLM connection.
-3. A prompt is created using a template.
-4. The prompt is sent to the Llama3 model.
-5. The model generates a response.
-6. The response is printed to the terminal.
+This ensures consistent and educational responses.
 
 ---
 
-## Example Prompt Flow
+## Step 9 — Build the Study Chain
+
+A chain connects the different components together.
+
+Typical chain flow:
 
 ```
-Prompt: Explain what LangChain is.
+Question
+   ↓
+Retriever
+   ↓
+Prompt Template
+   ↓
+Language Model
+   ↓
+Response
+```
 
-Model Processing...
+The chain orchestrates the full AI workflow.
 
-Response:
-LangChain is a framework used to build applications powered by large language models...
+---
+
+## Step 10 — Create Backend API Endpoints
+
+The backend exposes endpoints that allow the frontend to communicate with the AI system.
+
+Example endpoint:
+
+```
+POST /api/ask
+```
+
+Request example:
+
+```
+{
+  "question": "Explain Newton's second law"
+}
+```
+
+Response example:
+
+```
+{
+  "answer": "Newton's second law states that force equals mass multiplied by acceleration..."
+}
 ```
 
 ---
 
-## Configuration
+## Step 11 — Build the React User Interface
 
-Model settings such as temperature, model name, or inference parameters can be configured inside the LLM initialization module.
+The frontend provides an interface where students can interact with the assistant.
 
-Typical configurable parameters include:
+Key components include:
 
-* model name
-* temperature
-* maximum tokens
-* streaming behavior
+* chat interface
+* message display
+* formula rendering
+* question input box
 
----
-
-## Development Notes
-
-This project is designed as a minimal demonstration of integrating LangChain with a local language model. It can be extended to support more advanced AI workflows.
-
-Possible extensions include:
-
-* Retrieval-Augmented Generation (RAG)
-* Vector database integration
-* AI agents
-* document processing pipelines
-* chat memory systems
+The UI should be simple and focused on learning.
 
 ---
 
-## Advantages of Using a Local Model
+## Step 12 — Connect Frontend to Backend
 
-Running the Llama3 model locally provides several benefits:
+The React application communicates with the backend API using HTTP requests.
 
-* no external API dependency
-* lower operational cost
-* full data privacy
-* faster iteration during development
+Typical workflow:
 
----
-
-## Future Improvements
-
-Potential improvements for this project include:
-
-* adding a REST API layer
-* building a web UI for prompt interaction
-* integrating a vector database
-* implementing conversational memory
-* adding document ingestion for RAG pipelines
+```
+Student enters question
+        ↓
+React sends request to API
+        ↓
+Backend processes question
+        ↓
+AI generates response
+        ↓
+React displays the answer
+```
 
 ---
 
-## Summary
+## Step 13 — Integrate and Test the System
 
-This project demonstrates a simple but effective setup for building AI-powered applications using LangChain with TypeScript and a locally running Llama3 model. It provides a flexible foundation for developing more advanced AI systems such as chatbots, knowledge assistants, and automated workflows.
+Finally, integrate all components and test the system.
+
+Test scenarios include:
+
+* theory explanation
+* formula questions
+* problem solving
+* retrieval accuracy
+
+Ensure the assistant produces clear, structured, and helpful explanations.
+
+---
+
+# Knowledge Base Example
+
+Educational content may look like this:
+
+```
+Topic: Newton's Second Law
+
+Formula:
+F = m × a
+
+Explanation:
+Force equals mass multiplied by acceleration.
+
+Example:
+If a 2 kg object accelerates at 3 m/s²,
+the force applied is 6 N.
+```
+
+These materials become the knowledge source for the assistant.
+
+---
+
+# Future Improvements
+
+Possible extensions for this project include:
+
+* PDF document ingestion
+* student progress tracking
+* quiz generation
+* voice-based questions
+* personalized learning paths
+
+These features can transform the assistant into a full AI tutoring system.
+
+---
+
+# Summary
+
+The Student AI Assistant combines modern AI technologies with educational materials to provide interactive learning support. By integrating a local language model, a retrieval system, and a React interface, the system can explain concepts, show formulas, and guide students through problem-solving processes.
+
+This architecture provides a strong foundation for building scalable and intelligent educational tools.
